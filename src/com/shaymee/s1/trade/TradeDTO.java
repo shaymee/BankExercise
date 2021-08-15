@@ -13,14 +13,14 @@ public class TradeDTO {
 	private int received_paid;
 	private double balance;
 	
-	private ArrayList<BookDTO> ar;
+	private BookDTO bookDTO;
+
 	
-	
-	public ArrayList<BookDTO> getAr() {
-		return ar;
+	public BookDTO getBookDTO() {
+		return bookDTO;
 	}
-	public void setAr(ArrayList<BookDTO> ar) {
-		this.ar = ar;
+	public void setBookDTO(BookDTO bookDTO) {
+		this.bookDTO = bookDTO;
 	}
 	public String getAccount_num() {
 		return account_num;

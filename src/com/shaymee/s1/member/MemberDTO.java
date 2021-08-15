@@ -14,8 +14,15 @@ public class MemberDTO {
 	private String account_num;
 	
 	private ArrayList<BookDTO> ar;
-
-
+	private BookDTO bookDTO;
+	
+	
+	public BookDTO getBookDTO() {
+		return bookDTO;
+	}
+	public void setBookDTO(BookDTO bookDTO) {
+		this.bookDTO = bookDTO;
+	}
 	public ArrayList<BookDTO> getAr() {
 		return ar;
 	}

@@ -17,7 +17,7 @@ public class ProductDAO {
 	}
 		
 	
-	public ArrayList<ProductDTO> productInfo() {
+	public ArrayList<ProductDTO> kindOfproduct() {
 		Connection con = null;
 		PreparedStatement st = null;
 		ResultSet rs = null;
@@ -32,7 +32,7 @@ public class ProductDAO {
 			while(rs.next()) {
 				ProductDTO productDTO = new ProductDTO();
 				
-				productDTO.setProduct_id(rs.getString("PRODUCT_ID"));
+				productDTO.setProduct_id(rs.getInt("PRODUCT_ID"));
 				productDTO.setProduct_name(rs.getString("PRODUCT_NAME"));
 				productDTO.setInterest(rs.getDouble("INTEREST"));
 				productDTO.setOnsale(rs.getString("ONSALE"));
@@ -56,8 +56,47 @@ public class ProductDAO {
 		}
 		
 		return ar;
-		
-		
+
 	}
+	
+	public ProductDTO getProductOne(ProductDTO productDTO) {
+		Connection con = null;
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		ProductDTO pDTO = productDTO;
+		
+		try {
+			con = dbConnect.getConnect();
+			String sql = "SELECT * FROM PRODUCT WHERE PRODUCT_ID = ?";
+			st = con.prepareStatement(sql);
+			st.setInt(1, productDTO.getProduct_id());
+			rs = st.executeQuery();
+			
+			if(rs.next()) {				
+				pDTO.setProduct_id(rs.getInt("PRODUCT_ID"));
+				pDTO.setProduct_name(rs.getString("PRODUCT_NAME"));
+				pDTO.setInterest(rs.getDouble("INTEREST"));
+				pDTO.setOnsale(rs.getString("ONSALE"));
+				
+			}			
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				rs.close();
+				st.close();
+				con.close();	
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		return pDTO;
+	}
+	
+
 	
 }

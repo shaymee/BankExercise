@@ -1,17 +1,28 @@
 package com.shaymee.s1.product;
 
+import com.shaymee.s1.member.MemberDTO;
+
 public class ProductDTO {
 
-	private String product_id;
+	private int product_id;
 	private String product_name;
 	private double interest;
 	private String onsale;
 	
+	private MemberDTO memberDTO; //이건 넣기 싫었는데
 	
-	public String getProduct_id() {
+	
+	public MemberDTO getMemberDTO() {
+		return memberDTO;
+	}
+	public void setMemberDTO(MemberDTO memberDTO) {
+		this.memberDTO = memberDTO;
+	}
+
+	public int getProduct_id() {
 		return product_id;
 	}
-	public void setProduct_id(String product_id) {
+	public void setProduct_id(int product_id) {
 		this.product_id = product_id;
 	}
 	public String getProduct_name() {
