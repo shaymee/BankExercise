@@ -25,7 +25,6 @@ public class Bank_Main {
 		
 		
 		
-		
 //		Calendar cal = Calendar.getInstance();
 //		System.out.println(cal.getTimeInMillis()&100000);
 		

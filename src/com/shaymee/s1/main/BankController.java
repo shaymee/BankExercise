@@ -106,8 +106,7 @@ public class BankController {
 			} else if(select == 3){
 				check = false;
 				break;
-			}
-			
+			}			
 			
 		}
 				
