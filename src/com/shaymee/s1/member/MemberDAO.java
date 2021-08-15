@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import com.shaymee.s1.book.BookDTO;
 import com.shaymee.s1.util.BankConnect;
 
-public class MemberDAO {
+public class MemberDAO { 
 
 	private BankConnect dbConnect;
 	
