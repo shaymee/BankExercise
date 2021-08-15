@@ -91,7 +91,8 @@ public class BankController {
 				memberDTO = memberInput.inputLogin(sc);
 				ArrayList<MemberDTO> ar = memberDAO.getLogin(memberDTO);
 				
-				if(ar != null) {
+		
+				if(ar.size() != 0) {
 					bankView.view("== 로그인 성공 ==");
 					bankView.view(ar);
 				} else {
