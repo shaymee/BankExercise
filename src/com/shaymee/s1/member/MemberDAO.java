@@ -17,7 +17,62 @@ public class MemberDAO {
 		dbConnect = new BankConnect();
 	}
 	
-	public int setMember(MemberDTO memberDTO) { //회원가입 method
+	public MemberDTO member_books(MemberDTO memberDTO) { // 멤버 1 : 계좌 N 관계 메소드
+		Connection con = null;
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		MemberDTO mDTO = null;		
+		
+		try {
+			con = dbConnect.getConnect();
+			String sql = "SELECT B.ID, B.PRODUCT_ID, B.OPENING_DATE, B.ACCOUNT_NUM "
+					+ " FROM MEMBER M inner join BOOK B "
+					+ " ON (M.ID = B.ID) "
+					+ " WHERE M.ID = ? ";
+			
+			st = con.prepareStatement(sql);
+			st.setString(1, memberDTO.getId());
+			
+			rs = st.executeQuery();
+			
+			ArrayList<BookDTO> ar = new ArrayList<>();
+			mDTO = new MemberDTO();
+			while(rs.next()) {
+				BookDTO bookDTO = new BookDTO();
+				
+				bookDTO.setId(rs.getString("ID"));
+				bookDTO.setProduct_id(rs.getInt("PRODUCT_ID"));
+				bookDTO.setOpenning_date(rs.getDate("OPENING_DATE"));
+				bookDTO.setAccount_num(rs.getString("ACCOUNT_NUM"));
+				
+				ar.add(bookDTO);
+				
+			}
+					
+			mDTO.setAr(ar);
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				rs.close();
+				st.close();
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+		}
+		
+		return mDTO; //MemberDTO 객체 반환
+		
+	}
+	
+	
+	public int setMember(MemberDTO memberDTO) { //회원가입 메서드
 		
 		Connection con = null;
 		PreparedStatement st = null;		
@@ -54,7 +109,7 @@ public class MemberDAO {
 	}
 	
 	
-	public MemberDTO getLogin(MemberDTO memberDTO) {
+	public MemberDTO getLogin(MemberDTO memberDTO) { // 로그인 메서드
 		
 		Connection con = null;
 		PreparedStatement st = null;
@@ -102,5 +157,49 @@ public class MemberDAO {
 		return mDTO;
 	}
 	
+	
+	public ArrayList<MemberDTO> memberAll() { // 전체회원 정보 메서드
+		Connection con = null;
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		ArrayList<MemberDTO> ar = new ArrayList<>();
+		
+		try {
+			con = dbConnect.getConnect();
+			String sql = "SELECT ID, NAME, PHONE, EMAIL FROM MEMBER";
+			st = con.prepareStatement(sql);
+			rs = st.executeQuery();
+			
+			while(rs.next()) {
+				MemberDTO memberDTO = new MemberDTO();
+				memberDTO.setId(rs.getString(1));
+				memberDTO.setName(rs.getString(2));
+				memberDTO.setPhone(rs.getString(3));
+				memberDTO.setEmail(rs.getString(4));
+				
+				ar.add(memberDTO);
+
+			}
+			
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				rs.close();
+				st.close();
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		
+		}
+		
+		return ar;
+		
+	}
 	
 }
