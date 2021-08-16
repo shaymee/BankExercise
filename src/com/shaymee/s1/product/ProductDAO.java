@@ -17,7 +17,7 @@ public class ProductDAO {
 	}
 		
 	
-	public ArrayList<ProductDTO> kindOfproduct() {
+	public ArrayList<ProductDTO> kindOfproduct() { // 상품 종류 메서드
 		Connection con = null;
 		PreparedStatement st = null;
 		ResultSet rs = null;
@@ -59,7 +59,7 @@ public class ProductDAO {
 
 	}
 	
-	public ProductDTO getProductOne(ProductDTO productDTO) {
+	public ProductDTO getProductOne(ProductDTO productDTO) { // 상품 한개 pick 메소드
 		Connection con = null;
 		PreparedStatement st = null;
 		ResultSet rs = null;

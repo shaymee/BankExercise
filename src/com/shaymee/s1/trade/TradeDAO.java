@@ -19,22 +19,48 @@ public class TradeDAO {
 	}
 
 	
-	public void tradePaid(TradeDTO tradeDTO) {//계좌이체 메소드
+	public int tradePaid(ArrayList<TradeDTO> ar, int paid) {//계좌이체 메소드
 		Connection con = null;
 		PreparedStatement st = null;
+		int result = 0;
 		
 		try {
 			con = dbConnect.getConnect();
+			String sql = "INSERT INTO TRADE (ACCOUNT_NUM, TRADE_DATE, TRADE_AMOUNT, RECEIVED_PAID, BALANCE) "
+					+ " VALUES (?, sysdate, ?, ?, ?)";
+			
+			System.out.println(ar.get(ar.size()-1).getBalance());
+			System.out.println(ar.get(ar.size()-1).getAccount_num());
+			
+			st = con.prepareStatement(sql);
+			st.setString(1, ar.get(ar.size()-1).getAccount_num());
+
+			st.setDouble(2, -(paid));
+			st.setDouble(3, paid);
+			st.setDouble(4, (ar.get(ar.size()-1).getBalance())+paid);
+			
+			result = st.executeUpdate();
+			
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			try {
+				st.close();
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 		}
 		
+		return result;
 	}
 	
 	
-	public MemberDTO tradeInfo(MemberDTO memberDTO) {//거래내역 메소드
+	public MemberDTO tradeInfo(MemberDTO memberDTO) { //거래내역 메소드
 		Connection con = null;
 		PreparedStatement st = null;
 		ResultSet rs = null;
@@ -56,15 +82,15 @@ public class TradeDAO {
 			
 			while(rs.next()) {
 				BookDTO bookDTO = new BookDTO();
-				TradeDTO tradeDTO = new TradeDTO();
+				TradeDTO tDTO = new TradeDTO();
 				
 				bookDTO.setProduct_id(rs.getInt(1));
-				tradeDTO.setAccount_num(rs.getString(2));
-				tradeDTO.setTrade_date(rs.getDate(3));
-				tradeDTO.setTrade_amount(rs.getInt(4));
-				tradeDTO.setReceived_paid(rs.getInt(5));
-				tradeDTO.setBalance(rs.getDouble(6));
-				bookDTO.setTradeDTO(tradeDTO);
+				tDTO.setAccount_num(rs.getString(2));
+				tDTO.setTrade_date(rs.getDate(3));
+				tDTO.setTrade_amount(rs.getInt(4));
+				tDTO.setReceived_paid(rs.getInt(5));
+				tDTO.setBalance(rs.getDouble(6));
+				bookDTO.setTradeDTO(tDTO);
 				
 				System.out.println(bookDTO.getAccount_num());
 				ar.add(bookDTO);
@@ -73,9 +99,7 @@ public class TradeDAO {
 					mDTO.setAr(ar);
 				}
 			}
-			
-			
-			
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -95,6 +119,47 @@ public class TradeDAO {
 		
 	}
 	
+	public ArrayList<TradeDTO> accountReport(TradeDTO tradeDTO) { //계좌별로 거래내역 모음 메소드
+		Connection con = null;
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		ArrayList<TradeDTO> ar = new ArrayList<>();
+		
+		try {
+			con = dbConnect.getConnect();
+			String sql = "SELECT ACCOUNT_NUM, BALANCE FROM TRADE WHERE ACCOUNT_NUM = ?";
+			st = con.prepareStatement(sql);
+			st.setString(1, tradeDTO.getAccount_num());
+			
+			rs = st.executeQuery();
+			
+			while(rs.next()) {
+				TradeDTO tDTO = new TradeDTO();
+				
+				tDTO.setAccount_num(rs.getString("ACCOUNT_NUM"));
+				tDTO.setBalance(rs.getDouble("BALANCE"));
+				
+				ar.add(tDTO);
+				
+			}
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				rs.close();
+				st.close();
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		return ar;
+		
+	}
 	
 	
 }

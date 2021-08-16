@@ -21,8 +21,8 @@ public class BookDAO {
 	public BookDAO() {
 		dbConnect = new BankConnect();
 	}
-	
-	public MemberDTO myBookInfo(MemberDTO memberDTO) {
+
+	public MemberDTO myBookInfo(MemberDTO memberDTO) { // 내 계좌들 정보 메서드
 		Connection con = null;
 		PreparedStatement st = null;
 		ResultSet rs = null;
@@ -81,7 +81,7 @@ public class BookDAO {
 	}
 	
 	
-	public int makeBook(ProductDTO productDTO) {
+	public int makeBook(ProductDTO productDTO) { // 신규계좌 개설 메서드
 		Connection con = null;
 		PreparedStatement st = null;
 		Calendar cal = Calendar.getInstance();
@@ -93,7 +93,7 @@ public class BookDAO {
 					+ " VALUES (?, sysdate, 0, ?, ?)";
 			st = con.prepareStatement(sql);
 			st.setInt(1, productDTO.getProduct_id());
-			st.setString(2, "1234-5678-"+(cal.getTimeInMillis()&100000));
+			st.setString(2, "1234-5678-"+(cal.getTimeInMillis()&100000)); //계좌번호 뒷자리 랜덤한 수 via timeinMillis
 			st.setString(3, productDTO.getMemberDTO().getId());
 			
 			result = st.executeUpdate();
@@ -115,3 +115,156 @@ public class BookDAO {
 	}
 	
 }
+
+//public MemberDTO book_trades1(MemberDTO memberDTO, BookDTO bookDTO) { // 무쓸모 메서드
+//Connection con = null;
+//PreparedStatement st = null;
+//ResultSet rs = null;
+//
+//
+//try {
+//	con = dbConnect.getConnect();
+//	String sql = "SELECT T.ACCOUNT_NUM, T.BALANCE"
+//			+ " FROM MEMBER M inner join BOOK B "
+//			+ " ON (M.ID = B.ID) inner join TRADE T "
+//			+ " ON (T.ACCOUNT_NUM = B.ACCOUNT_NUM) "
+//			+ " WHERE M.ID = ? AND B.ACCOUNT_NUM = ? "
+//			+ " ORDER BY B.PRODUCT_ID";
+//	
+//	st = con.prepareStatement(sql);
+//	st.setString(1, memberDTO.getId());
+//	st.setString(2, memberDTO.getAr().get(0).getAccount_num());
+//	
+//	rs = st.executeQuery();
+//	
+//	ArrayList<TradeDTO> ar = new ArrayList<>();
+//	while(rs.next()) {
+//		TradeDTO tradeDTO = new TradeDTO();
+//		
+//		tradeDTO.setAccount_num(rs.getString("ACCOUNT_NUM"));
+//		tradeDTO.setBalance(rs.getDouble("BALANCE"));
+//		
+//		ar.add(tradeDTO);
+//
+//	}
+//	
+//	memberDTO.getAr().get(0).setAr(ar);
+//	
+//} catch (Exception e) {
+//	// TODO Auto-generated catch block
+//	e.printStackTrace();
+//} finally {
+//	try {
+//		rs.close();
+//		st.close();
+//		con.close();
+//	} catch (SQLException e) {
+//		// TODO Auto-generated catch block
+//		e.printStackTrace();
+//	}
+//
+//}
+//
+//return memberDTO;
+//}
+//
+//public MemberDTO book_trades2(MemberDTO memberDTO, BookDTO bookDTO) { // 무쓸모 메서드
+//Connection con = null;
+//PreparedStatement st = null;
+//ResultSet rs = null;
+//
+//
+//try {
+//	con = dbConnect.getConnect();
+//	String sql = "SELECT "
+//			+ " FROM MEMBER M inner join BOOK B "
+//			+ " ON (M.ID = B.ID) inner join TRADE T "
+//			+ " ON (T.ACCOUNT_NUM = B.ACCOUNT_NUM) "
+//			+ " WHERE M.ID = ? AND B.ACCOUNT_NUM = ? "
+//			+ " ORDER BY B.PRODUCT_ID";
+//	
+//	st = con.prepareStatement(sql);
+//	st.setString(1, memberDTO.getId());
+//	st.setString(2, memberDTO.getAr().get(1).getAccount_num());
+//	
+//	rs = st.executeQuery();
+//	
+//	ArrayList<TradeDTO> ar = new ArrayList<>();
+//	while(rs.next()) {
+//		TradeDTO tradeDTO = new TradeDTO();
+//		
+//		tradeDTO.setAccount_num(rs.getString("ACCOUNT_NUM"));
+//		tradeDTO.setBalance(rs.getDouble("BALANCE"));
+//		
+//		ar.add(tradeDTO);
+//
+//	}
+//	
+//	memberDTO.getAr().get(1).setAr(ar);
+//	
+//} catch (Exception e) {
+//	// TODO Auto-generated catch block
+//	e.printStackTrace();
+//} finally {
+//	try {
+//		rs.close();
+//		st.close();
+//		con.close();
+//	} catch (SQLException e) {
+//		// TODO Auto-generated catch block
+//		e.printStackTrace();
+//	}
+//
+//}
+//
+//return memberDTO;
+//}
+
+
+//public BookDTO InfoPlus(BookDTO bookDTO) { // 쓸모없는 메서드
+//Connection con = null;
+//PreparedStatement st = null;
+//ResultSet rs = null;
+//BookDTO bDTO = null;
+//
+//try {
+//	con = dbConnect.getConnect();
+//	String sql = "SELECT B.PRODUCT_ID, B.ACCOUNT_NUM, T.BALANCE FROM BOOK B inner join TRADE T "
+//			+ " ON (T.ACCOUNT_NUM = B.ACCOUNT_NUM) "
+//			+ " WHERE B.ACCOUNT_NUM = ?";
+//	st = con.prepareStatement(sql);
+//	
+//	st.setString(1, bookDTO.getAccount_num());
+//	rs = st.executeQuery();
+//	
+//	if(rs.next()) {
+//		bDTO = new BookDTO();
+//		TradeDTO tDTO = new TradeDTO();
+//		
+//		bDTO.setProduct_id(rs.getInt("PRODUCT_ID"));				
+//		bDTO.setAccount_num(rs.getString("ACCOUNT_NUM"));
+//		tDTO.setBalance(rs.getInt(6));
+//		bDTO.setTradeDTO(tDTO);
+//		
+//	}
+//	
+//	
+//	
+//} catch (Exception e) {
+//	// TODO Auto-generated catch block
+//	e.printStackTrace();
+//} finally {
+//	try {
+//		rs.close();
+//		st.close();
+//		con.close();
+//	} catch (SQLException e) {
+//		// TODO Auto-generated catch block
+//		e.printStackTrace();
+//	}
+//	
+//	
+//}
+//
+//return bDTO;
+//}
